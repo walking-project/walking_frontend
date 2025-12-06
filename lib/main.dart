@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:walking_client/screens/signUpPage.dart';
 import 'package:walking_client/screens/Home.dart';
+import 'package:walking_client/screens/mapPage.dart';
 
-main() => runApp(App());
+main() async {
+  runApp(App());
+}
 
 // const greyColor = 0xff8C8C8C;
 // const lightGreyColor = 0xffD9D9D9;
@@ -21,6 +24,7 @@ class App extends StatelessWidget {
         getPages: [
           GetPage(name: '/', page: () => Home()),
           GetPage(name: '/signup', page: () => SignUpPage()),
+          GetPage(name: '/map', page: () => MapPage()),
         ],
       );
     }

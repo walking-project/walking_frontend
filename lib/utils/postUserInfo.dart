@@ -6,7 +6,7 @@ final dio = Dio();
 
 Future<String> postUserInfo(String id, String nickname, String password) async {
   debugPrint('signUp button pressed: $id, $nickname, $password');
-  final response = await dio.post('http://localhost:4040/user', data: {'userid': id, 'username': nickname, 'password': password});
+  final response = await dio.post('http://104.197.217.130/user', data: {'userid': id, 'username': nickname, 'password': password});
   final data = response.data;
   print('data: $data');
   final dynamic token = data['accessToken'];

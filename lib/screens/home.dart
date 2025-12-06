@@ -2,19 +2,39 @@ import 'package:flutter/material.dart';
 import '../widgets/input.dart';
 import '../widgets/button.dart';
 import 'package:get/get.dart';
+import '../utils/login.dart';
+import '../contexts/userContext.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 main() => runApp(Home());
 
+class LoginController extends GetxController {
+  var id = ''.obs;
+  var password = ''.obs;
+
+  setId(String val) => id.value = val;
+  setPassword(String val) => password.value = val;
+}
+
 class Home extends StatelessWidget {
-  
-  final titleLogo = _buildLogo();
-  final idInput = buildInput('아이디');
-  final passwordInput = buildInput('비밀번호');
-  final loginBtn = buildButton('로그인');
-  final signUpBtn = buildButton('회원가입', () => Get.toNamed('/signup'));
+
+  final LoginController controller = Get.put(LoginController());
   
   @override
   Widget build(BuildContext context) {
+    final titleLogo = _buildLogo();
+    final idInput = buildInput('아이디', null, null, controller.setId);
+    final passwordInput = buildInput('비밀번호', null, null, controller.setPassword);
+    final loginBtn = buildButton('로그인', () async {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('accessToken');
+      final res = await login(controller.id.value, controller.password.value, token as String);
+      if(!context.mounted) return;
+      if(res == false) showAlert(context);
+      else Get.toNamed('/map');
+    });
+    final signUpBtn = buildButton('회원가입', () => Get.toNamed('/signup'));
+
     return MaterialApp(
       title: '뚜벅뚜벅',
       home: Scaffold(

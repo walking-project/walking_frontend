@@ -4,24 +4,13 @@ import '../widgets/input.dart';
 import '../widgets/button.dart';
 import 'package:get/get.dart';
 import '../utils/postUserInfo.dart';
-import 'package:walking_client/screens/Home.dart';
+import '../contexts/userContext.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 const greyColor = 0xff8C8C8C;
 const lightGreyColor = 0xffD9D9D9;
 const lightGreenColor = 0xffE7F5E4;
 const greenColor = 0xff51D32D;
-
-class Controller extends GetxController {
-  var id = ''.obs; // Observable 변수 선언, 전역 상태가 아닌 input값 설정하는 상태
-  var nickname = ''.obs;
-  var password = ''.obs;
-  var accessToken = ''.obs;
-
-  setId(String val) => id.value = val;
-  setNickname(String val) => nickname.value = val;
-  setPassword(String val) => password.value = val;
-  setToken(String val) => accessToken.value = val;
-}
 
 class SignUpPage extends StatelessWidget {
     
@@ -29,7 +18,6 @@ class SignUpPage extends StatelessWidget {
 
     @override
     Widget build(BuildContext context) {
-
       final header = buildHeader('회원가입');
       final nicknameForm = buildForm('닉네임', controller.setNickname);
       final idForm = buildForm('아이디', controller.setId);
@@ -37,10 +25,9 @@ class SignUpPage extends StatelessWidget {
       final confirmButton = buildButton('회원가입', () async{
         final token = await postUserInfo(controller.id.value, controller.nickname.value, controller.password.value);
         print('response token: $token');
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setString('accessToken', token);
         controller.setToken(token);
-        controller.setId('');
-        controller.setNickname('');
-        controller.setPassword('');
         Get.toNamed('/');
         // print(controller.accessToken.value);
       }); // 함수를 실행된 상태로 넘기면 안됨
