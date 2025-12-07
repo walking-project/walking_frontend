@@ -57,13 +57,20 @@ class MapPageState extends State<MapPage> {
   }
 
   void updatePosition(Position position) {
+    try {
       setState(() {
         points.add(LatLng(position.latitude, position.longitude));
+        print('added : ${position.latitude}, ${position.longitude}');
       });
+    } catch(e,s) {
+      print('update error: $e');
+      print(s);
+    }
   }
 
   void startPath() async {
     print('Streaming start.');
+    await positionStream?.cancel();
     setState(() {
       points.clear();
     });
@@ -86,7 +93,7 @@ class MapPageState extends State<MapPage> {
     if(positionStream == null) print('경로 시작을 먼저 눌러주세요.');
     else {
       positionStream!.cancel();
-      print('Stream canceled');
+      print('Stream canceled: $points');
     };
   }
 

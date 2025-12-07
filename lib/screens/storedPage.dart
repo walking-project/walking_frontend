@@ -3,12 +3,10 @@ import '../widgets/header.dart';
 import '../widgets/input.dart';
 import '../widgets/menu.dart';
 
-main() => runApp(storedPage());
-
 const greyColor = 0xff8C8C8C;
 const lightGreyColor = 0xffD9D9D9;
 
-class storedPage extends StatelessWidget {
+class StoredPage extends StatelessWidget {
 
     final header = buildHeader('저장된 경로');
     final menu = buildMenu();

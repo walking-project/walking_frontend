@@ -3,10 +3,7 @@ import '../widgets/input.dart';
 import '../widgets/button.dart';
 import 'package:get/get.dart';
 import '../utils/login.dart';
-import '../contexts/userContext.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-main() => runApp(Home());
 
 class LoginController extends GetxController {
   var id = ''.obs;

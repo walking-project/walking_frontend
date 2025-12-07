@@ -3,8 +3,14 @@ import 'package:get/get.dart';
 import 'package:walking_client/screens/signUpPage.dart';
 import 'package:walking_client/screens/Home.dart';
 import 'package:walking_client/screens/mapPage.dart';
+import 'package:walking_client/screens/storedPage.dart';
+import 'package:walking_client/screens/boardPage.dart';
+import 'package:walking_client/screens/profilePage.dart';
+import 'package:walking_client/contexts/colorContext.dart';
+import 'package:walking_client/screens/writeBoardPage.dart';
 
 main() async {
+  Get.put(menuController(), permanent: true);
   runApp(App());
 }
 
@@ -25,6 +31,10 @@ class App extends StatelessWidget {
           GetPage(name: '/', page: () => Home()),
           GetPage(name: '/signup', page: () => SignUpPage()),
           GetPage(name: '/map', page: () => MapPage()),
+          GetPage(name: '/stored', page: () => StoredPage()),
+          GetPage(name: '/board', page: () => BoardPage()),
+          GetPage(name: '/profile', page: () => ProfilePage()),
+          GetPage(name: '/board/write', page: () => WriteBoardPage()),
         ],
       );
     }
