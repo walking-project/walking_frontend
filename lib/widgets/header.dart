@@ -12,7 +12,7 @@ Container buildHeader(String text) {
         )
       ),
       child: Center(
-        child: Text(text, style: TextStyle(color: Color(0xff404040), fontSize: 30, fontWeight: FontWeight.w700))
+        child: Text(text, style: TextStyle(color: Color(0xff404040), fontSize: 18, fontWeight: FontWeight.w700))
       )
     );
 }

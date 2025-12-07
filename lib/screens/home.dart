@@ -72,14 +72,14 @@ Container _buildLogo(){
           Text(
             '뚜벅뚜벅', 
             style: TextStyle(
-              fontSize: 40,
+              fontSize: 25,
               fontWeight: FontWeight.w800,
             )
           ),
           Text(
             '당신의 산책 파트너',
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 15,
               fontWeight: FontWeight.w300,
             )
           ),

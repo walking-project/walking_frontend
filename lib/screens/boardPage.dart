@@ -111,12 +111,15 @@ Container boardModal(String title, String name, String postId, [dynamic onTap, S
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title, style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w600)),
-            Text('작성자: $name', style: TextStyle(color: Color(greyColor), fontSize: 14, fontWeight: FontWeight.w500)),
-          ]
+        Container(
+          width: 150,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.w600)),
+              Text('작성자: $name', style: TextStyle(color: Color(greyColor), fontSize: 10, fontWeight: FontWeight.w500)),
+            ]
+          ),
         ),
         Container(
           width: 100,

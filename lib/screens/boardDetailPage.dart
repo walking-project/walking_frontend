@@ -125,7 +125,7 @@ Container buildContentArea(String name, String date, String content, List point)
                     child: Text(name, style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500)),
                   ),
                   Container(
-                    child: Text(date, style: TextStyle(color: Color(greyColor), fontSize: 15, fontWeight: FontWeight.w500)),
+                    child: Text(date.substring(0, 10), style: TextStyle(color: Color(greyColor), fontSize: 15, fontWeight: FontWeight.w500)),
                   )
                 ]
               )
