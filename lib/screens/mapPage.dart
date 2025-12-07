@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import '../widgets/button.dart';
 import '../widgets/menu.dart';
@@ -94,6 +93,7 @@ class MapPageState extends State<MapPage> {
     else {
       positionStream!.cancel();
       print('Stream canceled: $points');
+      Get.toNamed('/path/store', arguments: {'path': points});
     };
   }
 

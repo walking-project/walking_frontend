@@ -14,7 +14,7 @@ const greenColor = 0xff51D32D;
 
 class SignUpPage extends StatelessWidget {
     
-    final Controller controller = Get.put(Controller());
+    final Controller controller = Get.find<Controller>();
 
     @override
     Widget build(BuildContext context) {

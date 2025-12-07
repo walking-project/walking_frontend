@@ -5,6 +5,8 @@ import '../widgets/input.dart';
 import '../widgets/button.dart';
 import 'package:get/get.dart';
 import '../utils/getBoards.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../utils/getSpecificBoardDetail.dart';
 
 const greyColor = 0xff8C8C8C;
 const lightGreyColor = 0xffD9D9D9;
@@ -44,6 +46,12 @@ class BoardPage extends StatelessWidget {
       final button = buildButton('글쓰기', () => Get.toNamed('/board/write'));
       BoardController boardController = Get.put(BoardController());
 
+      void onTap(String postId) async {
+        final response = await getSpecificBoardDetail(postId);
+        print('response: $response');
+        Get.toNamed('/board/detail', arguments: {'detail': response[0]});
+      }
+
       return MaterialApp(
         home: Scaffold(
           backgroundColor: Colors.white,
@@ -63,7 +71,7 @@ class BoardPage extends StatelessWidget {
                             width: 20,
                           ),
                           Obx(() => Column(
-                            children: [...boardController.boards.value.map((board) => boardModal(board['title'], board['userid'], board['postId'].toString()))],
+                            children: [...boardController.boards.value.map((board) => GestureDetector(onTap: () => onTap(board['postId']), child: boardModal(board['title'], board['userid'], board['postId'].toString())))],
                           )),
                         ]
                       )
@@ -79,7 +87,9 @@ class BoardPage extends StatelessWidget {
     }
 }
 
-Container boardModal(String title, String name, String postId, [String? imageUrl]) {
+Container boardModal(String title, String name, String postId, [dynamic onTap, String? imageUrl]) {
+  GoogleMapController? mapController;
+  BoardController boardController = Get.find<BoardController>();
   return Container(
     key: ValueKey(postId),
     width: double.infinity,
@@ -113,7 +123,48 @@ Container boardModal(String title, String name, String postId, [String? imageUrl
           height: 100,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            color: Color(greyColor),
+          ),
+          child: Obx(() {
+                final b = boardController.boards.value;
+                final idx = b.indexWhere((e) => e['postId'] == postId);
+                if(idx == -1){
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Color(greyColor),
+                      ),
+                    );
+                }
+                else {
+                  final rpoints = b[idx]['point'];
+                  if(rpoints is! List || rpoints.isEmpty) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Color(greyColor),
+                      ),
+                    );
+                  }
+                  final points = rpoints.cast<Map<String, dynamic>>();
+                  return (GoogleMap(
+                      onMapCreated: (controller) async {
+                        mapController = controller;
+                      },
+                      initialCameraPosition: CameraPosition(
+                        zoom: 15,
+                        target: LatLng(points[0]['x'], points[0]['y'])
+                      ),
+                      myLocationEnabled: true,
+                      myLocationButtonEnabled: true,
+                      zoomControlsEnabled: false,
+                      polylines: {
+                        Polyline(
+                          polylineId: const PolylineId('walkingPath'),
+                          points: points.map((p) => LatLng(p['x'], p['y'])).toList(),
+                          width: 5,
+                        )
+                      },
+                  ));
+                }
+            }
           )
         ),
       ]

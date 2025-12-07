@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
 import '../widgets/header.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../widgets/button.dart';
 
 const greyColor = 0xff8C8C8C;
 const lightGreyColor = 0xffD9D9D9;
 const lightGreenColor = 0xffE7F5E4;
 const greenColor = 0xff51D32D;
 
-class storedPage extends StatelessWidget {
-
-    final header = buildHeader('서천마을');
-    final contentArea = buildContentArea('이순신', '2024년 7월 15일', '“도심 속 숲길이 있는 동네에서 살고 싶다”는 꿈, 누구나 한 번쯤 꾸죠. 서천마을은 그 바람을 현실로 만들어주는 곳입니다. 도심과 가깝지만, 내부에는 자연과 쉼터가 조화롭게 어우러져 있죠. 도시의 편리함과 녹색 여유가 함께 있는 주거지, 바로 이곳입니다. 출퇴근은 편하고, 주말엔 산책로와 공원이 기다립니다. 도시와 자연의 균형을 찾는다면, 서천마을이 그 해답입니다.');
-    final commentArea = buildCommentArea(12);
+class BoardDetailPage extends StatelessWidget {
 
     @override
     Widget build(BuildContext context) {
+
+      final detail = Get.arguments['detail'];
+      final header = buildHeader(detail['title']);
+      final contentArea = buildContentArea(detail['userid'], detail['time'], detail['content'], detail['point']);
+      final commentArea = buildCommentArea(12);
+      final backBtn = buildButton('뒤로가기', () => Get.toNamed('/board'));
 
       return MaterialApp(
         home: Scaffold(
@@ -31,7 +36,8 @@ class storedPage extends StatelessWidget {
                       child: Column(
                         children: [
                           contentArea,
-                          commentArea,
+                          backBtn,
+                          // commentArea,
                         ]
                       )
                     ),
@@ -86,7 +92,8 @@ class storedPage extends StatelessWidget {
     }
 }
 
-Container buildContentArea(String name, String date, String content) {
+Container buildContentArea(String name, String date, String content, List point) {
+  GoogleMapController? mapController;
   return Container(
     decoration: BoxDecoration(color: Colors.white),
     padding: EdgeInsets.symmetric(vertical: 20),
@@ -129,9 +136,25 @@ Container buildContentArea(String name, String date, String content) {
           width: double.infinity,
           margin: EdgeInsets.only(bottom: 20),
           height: 250,
-          decoration: BoxDecoration(
-            color: Color(greyColor),
-          ),
+          child: GoogleMap(
+                      onMapCreated: (controller) async {
+                        mapController = controller;
+                      },
+                      initialCameraPosition: CameraPosition(
+                        zoom: 17,
+                        target: LatLng(point[0]['x'], point[0]['y'])
+                      ),
+                      myLocationEnabled: true,
+                      myLocationButtonEnabled: true,
+                      zoomControlsEnabled: false,
+                      polylines: {
+                        Polyline(
+                          polylineId: const PolylineId('walkingPath'),
+                          points: point.map((p) => LatLng(p['x'], p['y'])).toList(),
+                          width: 5,
+                        )
+                      },
+                  )
         ),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
